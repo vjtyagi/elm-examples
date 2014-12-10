@@ -1,21 +1,27 @@
-import Keyboard
-import Window
+import Color (..)
 import Debug
+import Graphics.Collage (..)
+import Graphics.Element (..)
+import Keyboard
+import Signal
+import Time (..)
+import Window
 
 
 -- MODEL
 
-type Model =
-    { x   : Float
-    , y   : Float
-    , vx  : Float
-    , vy  : Float
+type alias Model =
+    { x : Float
+    , y : Float
+    , vx : Float
+    , vy : Float
     , dir : Direction
     }
 
-data Direction = Left | Right
+type Direction = Left | Right
 
-type Keys = { x:Int, y:Int }
+type alias Keys = { x:Int, y:Int }
+
 
 mario : Model
 mario =
@@ -29,8 +35,8 @@ mario =
 
 -- UPDATE
 
-step : (Float, Keys) -> Model -> Model
-step (dt, keys) mario =
+update : (Float, Keys) -> Model -> Model
+update (dt, keys) mario =
     mario
         |> gravity dt
         |> jump keys
@@ -38,15 +44,20 @@ step (dt, keys) mario =
         |> physics dt
         |> Debug.watch "mario"
 
+
 jump : Keys -> Model -> Model
 jump keys mario =
-    if keys.y > 0 && mario.vy == 0 then { mario | vy <- 6.0 } else mario
+    if keys.y > 0 && mario.vy == 0
+      then { mario | vy <- 6.0 }
+      else mario
+
 
 gravity : Float -> Model -> Model
 gravity dt mario =
     { mario |
-        vy <- if mario.y > 0 then mario.vy - dt/4 else 0
+        vy <- if mario.y > 0 then mario.vy - dt/40 else 0
     }
+
 
 physics : Float -> Model -> Model
 physics dt mario =
@@ -55,32 +66,35 @@ physics dt mario =
         y <- max 0 (mario.y + dt * mario.vy)
     }
 
+
 walk : Keys -> Model -> Model
 walk keys mario =
     { mario |
         vx <- toFloat keys.x,
-        dir <- if | keys.x < 0 -> Left
-                  | keys.x > 0 -> Right
-                  | otherwise  -> mario.dir
+        dir <-
+          if  | keys.x < 0 -> Left
+              | keys.x > 0 -> Right
+              | otherwise  -> mario.dir
     }
 
 
--- DISPLAY
+-- VIEW
 
-display : (Int, Int) -> Model -> Element
-display (w',h') mario =
+view : (Int, Int) -> Model -> Element
+view (w',h') mario =
   let (w,h) = (toFloat w', toFloat h')
 
-      verb = if | mario.y  >  0 -> "jump"
-                | mario.vx /= 0 -> "walk"
-                | otherwise     -> "stand"
+      verb =
+        if  | mario.y  >  0 -> "jump"
+            | mario.vx /= 0 -> "walk"
+            | otherwise     -> "stand"
 
-      dir = case mario.dir of
-              Left -> "left"
-              Right -> "right"
+      dir =
+        case mario.dir of
+          Left -> "left"
+          Right -> "right"
 
-      src  = "imgs/mario/"++ verb ++ "/" ++ dir ++ ".gif"
-      --src  = "http://i188.photobucket.com/albums/z137/DreamsInMotion/Video%20Game%20Pictures/Metroid/samus-1.gif" 
+      src = "imgs/mario/"++ verb ++ "/" ++ dir ++ ".gif"
 
       marioImage = image 35 35 src
 
@@ -102,12 +116,14 @@ display (w',h') mario =
 -- SIGNALS
 
 main : Signal Element
-main = lift2 display Window.dimensions (foldp step mario input)
+main =
+  Signal.map2 view Window.dimensions (Signal.foldp update mario input)
+
 
 input : Signal (Float, Keys)
 input =
-  let delta = lift (\t -> t/20) (fps 25)
+  let delta = Signal.map (\t -> t/20) (fps 25)
       deltaArrows =
-          lift2 (,) delta (Debug.watch "arrows" <~ Keyboard.arrows)
+          Signal.map2 (,) delta (Signal.map (Debug.watch "arrows") Keyboard.arrows)
   in
-      sampleOn delta deltaArrows
+      Signal.sampleOn delta deltaArrows

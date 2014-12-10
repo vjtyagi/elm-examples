@@ -9,13 +9,11 @@ fun to play with in [Elm Reactor][reactor].
 
 ## Get Set Up
 
-First make sure you have [Elm Platform][platform] 0.13 or higher. The next
-step is to clone this repo:
-
-[platform]: https://github.com/elm-lang/elm-platform/
+After [installing Elm Platform](http://elm-lang.org/Install.elm), clone this
+repo:
 
 ```shell
-git clone https://github.com/michaelbjames/elm-examples.git
+git clone https://github.com/evancz/elm-examples.git
 cd elm-examples
 ```
 
