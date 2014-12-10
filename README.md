@@ -17,30 +17,16 @@ git clone https://github.com/evancz/elm-examples.git
 cd elm-examples
 ```
 
-From there you need to build the TodoMVC example. This will make it possible
-to open up `todo/todo.html` and see TodoMVC with the debugger:
-
-```shell
-cd todo
-elm-get install
-elm --make --only-js Todo.elm
-cd ..
-```
-
-Finally, you can start the reactor from the root of this project and start
-playing with the examples:
+And then start the reactor with the following command:
 
 ```shell
 elm-reactor
 ```
 
-The Reactor should be running at [http://localhost:8000][localhost]. Check it
-out!
+The Reactor should be running at [http://localhost:8000][localhost].
+Check it out!
 
 [localhost]: http://localhost:8000
 
-## Notes
-
-Be sure to look at `todo/todo.html`, not `todo/Todo.elm`. The Elm code uses
-ports to communicate with JavaScript, so you need to run this program from the
-HTML file which initializes everything properly.
+If you want more examples to mess with, try taking something from the
+[examples page](http://elm-lang.org/Examples.elm).
