@@ -55,7 +55,7 @@ jump keys mario =
 gravity : Float -> Model -> Model
 gravity dt mario =
     { mario |
-        vy <- if mario.y > 0 then mario.vy - dt/40 else 0
+        vy <- if mario.y > 0 then mario.vy - dt/8 else 0
     }
 
 
@@ -99,6 +99,8 @@ view (w',h') mario =
       marioImage = image 35 35 src
 
       groundY = 62 - h/2
+
+      position = (mario.x, mario.y + groundY)
   in
       collage w' h'
           [ rect w h
@@ -109,7 +111,10 @@ view (w',h') mario =
           , marioImage
               |> toForm
               |> Debug.trace "mario"
-              |> move (mario.x, mario.y + groundY)
+              |> move position
+          , group [ move (15,0) (Debug.trace "dot" (filled red (circle 4))) ]
+              |> rotate (degrees (10 * mario.x))
+              |> move position
           ]
 
 
@@ -122,7 +127,7 @@ main =
 
 input : Signal (Float, Keys)
 input =
-  let delta = Signal.map (\t -> t/20) (fps 25)
+  let delta = Signal.map (\t -> t/20) (fps 30)
       deltaArrows =
           Signal.map2 (,) delta (Signal.map (Debug.watch "arrows") Keyboard.arrows)
   in
