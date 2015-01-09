@@ -24,7 +24,8 @@ elm-reactor
 ```
 
 The Reactor should be running at [http://localhost:8000][localhost].
-Check it out!
+Check it out! Be sure to click on the little wrenches to go into debug
+mode.
 
 [localhost]: http://localhost:8000
 
