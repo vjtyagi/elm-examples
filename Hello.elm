@@ -8,9 +8,7 @@ Learn about the Elm's core libraries:
 
 -}
 
-import Graphics.Element (..)
-import List
-import Text (..)
+import Graphics.Element exposing (..)
 
 
 main : Element
@@ -23,7 +21,7 @@ main =
 
 helloWorld : Element
 helloWorld =
-    asText "Hello, World!"
+    show "Hello, World!"
 
 
 welcomeGraphics : Element

@@ -1,12 +1,11 @@
-import Color (..)
-import Graphics.Collage (..)
-import Graphics.Element (..)
-import Signal
-import Time (..)
+import Color exposing (..)
+import Graphics.Collage exposing (..)
+import Graphics.Element exposing (..)
+import Time exposing (second)
 
 
 main =
-  Signal.map clock (every second)
+  Signal.map clock (Time.every second)
 
 
 clock t =
@@ -20,7 +19,7 @@ clock t =
 
 
 hand clr len time =
-  let angle = degrees (90 - 6 * inSeconds time)
+  let angle = degrees (90 - 6 * Time.inSeconds time)
   in
       segment (0,0) (fromPolar (len,angle))
         |> traced (solid clr)

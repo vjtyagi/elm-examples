@@ -1,10 +1,9 @@
-import Color (..)
+import Color exposing (..)
 import Debug
-import Graphics.Collage (..)
-import Graphics.Element (..)
+import Graphics.Collage exposing (..)
+import Graphics.Element exposing (..)
 import Keyboard
-import Signal
-import Time (..)
+import Time exposing (..)
 import Window
 
 
@@ -26,7 +25,7 @@ type alias Keys = { x:Int, y:Int }
 mario : Model
 mario =
     { x = 0
-    , y = 0 
+    , y = 0
     , vx = 0
     , vy = 0
     , dir = Right
@@ -55,7 +54,7 @@ jump keys mario =
 gravity : Float -> Model -> Model
 gravity dt mario =
     { mario |
-        vy <- if mario.y > 0 then mario.vy - dt/8 else 0
+        vy <- if mario.y > 0 then mario.vy - dt/4 else 0
     }
 
 
@@ -111,9 +110,6 @@ view (w',h') mario =
           , marioImage
               |> toForm
               |> Debug.trace "mario"
-              |> move position
-          , group [ move (15,0) (Debug.trace "dot" (filled red (circle 4))) ]
-              |> rotate (degrees (10 * mario.x))
               |> move position
           ]
 
