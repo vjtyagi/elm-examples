@@ -64,13 +64,50 @@ activeUsers =
       ,LoggedIn "Steve"
       ,Anonymous
     ]
-
+{--
 type Widget =
     ScatterPlot (List (Int Int))
   | LogData (List String)
   | TimePlot (List (Time, Int))
+--}
 
+type alias Positioned a =
+  { a |
+      x : Float,
+      y : Float
+  }
 
+type alias Named a = 
+  { a |
+     name : String
+  }
+
+type alias Moving a = 
+  { a |
+      velocity : Float,
+      angle : Float
+  }
+
+lady : Named { age: Int }
+lady  = { name = "Loise Lane", age = 21}
+
+dude : Named (Moving (Positioned {}))
+dude = 
+  {
+    name = "Vijay",
+    x = 0,
+    y = 0,
+    velocity = 39,
+    angle = 30
+  }
+
+getName : Named a -> String
+getName {name} =
+  name
+
+getPosition : Positioned a -> (Float, Float)
+getPosition {x, y} =
+  (x, y)
 
 
 main : Element
@@ -87,5 +124,5 @@ helloWorld =
 
 demo : Element
 demo = 
-  show (map userPhoto activeUsers)
+  show (getPosition dude)
 

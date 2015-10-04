@@ -1,22 +1,42 @@
-import Html exposing(div, button, text)
+module Counter (Model, Action, update, view, init) where
+import Html exposing (div, text, button, Html, Attribute)
 import Html.Events exposing(onClick)
-import StartApp.Simple as StartApp
+import Html.Attributes exposing(style)
 
-main =
-    StartApp.start {model = model, view = view, update = update}
+-- Model
+type alias Model = Int
 
-model = 0
+init : Int -> Model
+init count = count
 
+-- View
+view : Signal.Address Action -> Model -> Html
 view address model =
-    div []
-        [ button [onClick address Decrement] [text "-"]
-        , div [] [text (toString model)]
-        , button [onClick address Increment] [text "+"]
-        ]
+    div [] [
+         button[onClick address Increment][text "+"]
+        ,div [countStyle] [text (toString model)]
+        ,button [onClick address Decrement ][text "-"]
+    ]
 
 type Action = Increment | Decrement
 
+-- Update
+update : Action -> Model -> Model
 update action model =
     case action of
-        Increment -> model + 1
-        Decrement -> model - 1
+        Increment ->
+            model + 1
+        Decrement ->
+            model - 1
+
+
+-- Style
+countStyle : Attribute
+countStyle =
+    style
+         [ ("font-size", "20px")
+          ,("font-family", "monospace")
+          ,("display", "inline-block")
+          ,("width", "50px")
+          ,("text-align", "center")
+         ]
