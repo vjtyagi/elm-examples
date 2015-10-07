@@ -8,11 +8,11 @@ get : Task Http.Error (List String)
 get =
     Http.get (Json.list Json.string) "http://example.com/hats-list.json"
 
-safeget : Task x (Result Http.Error (List String) )
+safeget : Task x ( Maybe (List String) )
 safeget =
-    Task.toResult get
+    Task.toMaybe get
 port runner : Task x ()
-runner =
+port runner =
     safeget `andThen` print
 
 main = 
