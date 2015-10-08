@@ -1,12 +1,13 @@
 import Counter exposing (update, view)
+import Html exposing (Html)
 import Debug
 main =
     start { model = 0, view = view, update = update }
 
-type alias config model action =
+type alias Config model action =
     { model : model
-    , view : Address action -> model -> Html
-    , update: action -> model -> model
+    , view : Signal.Address action -> model -> Html
+    , update : action -> model -> model
     }
 
 start : Config model action -> Signal Html
