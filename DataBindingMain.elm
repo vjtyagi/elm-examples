@@ -10,7 +10,7 @@ type alias Config model action = {
     , view : Signal.Address action -> model -> Html
 }
 
-start : Config model action-> Signal Html
+start : Config model action -> Signal Html
 
 start config =
     let
