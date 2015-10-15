@@ -1,4 +1,4 @@
-module Counter (Model, Action, update, view, init) where
+module Counter (Model, Action, update, view, init, viewWithRemoveButton, Context) where
 import Html exposing (div, text, button, Html, Attribute)
 import Html.Events exposing(onClick)
 import Html.Attributes exposing(style)
@@ -36,8 +36,8 @@ update action model =
 
 
 -- View with remove button 
-view : Context -> Model -> Html
-view context model =
+viewWithRemoveButton : Context -> Model -> Html
+viewWithRemoveButton context model =
   div [][
       button [onClick context.actions Increment][text "+"]
     , div [countStyle][text (toString model)]
