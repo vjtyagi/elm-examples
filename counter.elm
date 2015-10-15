@@ -9,6 +9,11 @@ type alias Model = Int
 init : Int -> Model
 init count = count
 
+type alias Context = {
+    actions : Signal.Address Action
+  , remove : Signal.Address ()
+}
+
 -- View
 view : Signal.Address Action -> Model -> Html
 view address model =
@@ -29,6 +34,17 @@ update action model =
         Decrement ->
             model - 1
 
+
+-- View with remove button 
+view : Context -> Model -> Html
+view context model =
+  div [][
+      button [onClick context.actions Increment][text "+"]
+    , div [countStyle][text (toString model)]
+    , button [onClick context.actions Decrement] [text "-"]
+    , div [countStyle] []
+    , button [onClick context.remove ()] [text "X"]
+  ]
 
 -- Style
 countStyle : Attribute
