@@ -10,6 +10,8 @@ type alias Model = {
 
 -- init
 init : String -> (Model, Effects Action)
+init topic =
+    (Model topic "assets/waiting.gif", getRandomGif model.topic )
 
 -- Action
 type Action =
@@ -27,3 +29,20 @@ update action model =
         NewGif maybeUrl ->
             (Model model.topic (MayBe.withDefault model.url maybeUrl )
             , Effects.none )
+
+getRandomGif : String -> Effects Action
+getRandomGif topic =
+    Http.get decodeImageUrl (randomUrl topic)
+        |> Task.toMaybe
+        |> Task.map NewGif
+        |> Effects.task
+
+randomUrl : String -> String
+randomUrl topic =
+    Http.url "http://api.giphy.com/v1/gifs/random"
+        ["api_key" => "dc6zaTOxFJmzC", "tag" => topic]
+
+
+decodeImageUrl : Json.Decoder String
+decodeImageUrl =
+    Json.at ["data", "image_url"] Json.string
